@@ -45,7 +45,7 @@ class SingleLinkedList {
         }
 
         [[nodiscard]] bool operator!=(const BasicIterator<const Type>& rhs) const noexcept {
-            return node_ != rhs.node_;
+            return !(node_ == rhs.node_);
         }
 
         [[nodiscard]] bool operator==(const BasicIterator<Type>& rhs) const noexcept {
@@ -53,10 +53,11 @@ class SingleLinkedList {
         }
 
         [[nodiscard]] bool operator!=(const BasicIterator<Type>& rhs) const noexcept {
-            return node_ != rhs.node_;
+            return !(node_ == rhs.node_);
         }
 
         BasicIterator& operator++() noexcept {
+            assert(node_);
             node_ = node_->next_node;
             return *this;
         }
@@ -68,12 +69,13 @@ class SingleLinkedList {
         }
 
         [[nodiscard]] reference operator*() const noexcept {
+            assert(node_);
             return node_->value;
         }
 
         [[nodiscard]] pointer operator->() const noexcept {
+            assert(node_);
             return &node_->value;
-
         }
 
     private:
@@ -86,16 +88,12 @@ public:
 
     template <typename It>
     void insert_elements(It begin, It end) {
-        SingleLinkedList tmp1, tmp2;
-        // insert elements in reverse order
+        Node* node = &head_;
         for (auto it = begin; it != end; ++it) {
-            tmp1.PushFront(*it);
+            ++size_;
+            node->next_node = new Node(*it, nullptr);
+            node = node->next_node;
         }
-        // insert elements in correct order
-        for (auto it = tmp1.begin(); it != tmp1.end(); ++it) {
-            tmp2.PushFront(*it);
-        }
-        swap(tmp2);
     }
 
     SingleLinkedList(std::initializer_list<Type> values) {
@@ -147,17 +145,14 @@ public:
     }
 
     [[nodiscard]] Iterator before_begin() noexcept {
-        // Реализуйте самостоятельно
         return Iterator{ &head_ };
     }
 
     [[nodiscard]] ConstIterator cbefore_begin() const noexcept {
-        // Реализуйте самостоятельно
         return ConstIterator{ const_cast<Node*>(&head_) };
     }
 
     [[nodiscard]] ConstIterator before_begin() const noexcept {
-        // Реализуйте самостоятельно
         return cbefore_begin();
     }
 
@@ -217,10 +212,7 @@ public:
     }
 
     [[nodiscard]] bool IsEmpty() const noexcept {
-        if (size_ == 0) {
-            return true;
-        }
-        return false;
+        return size_ == 0;
     }
 
 private:
