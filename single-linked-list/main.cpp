@@ -1,6 +1,8 @@
 #include <cassert>
-
+#include <iostream>
 #include "single-linked-list.h"
+
+using namespace std::literals;
 
 // Эта функция проверяет работу класса SingleLinkedList
 void Test() {
@@ -26,6 +28,7 @@ void Test() {
         assert(deletion_counter == 0);
         list.PopFront();
         assert(deletion_counter == 1);
+		std::cout<<"PopFront check passed"s<<std::endl;
     }
 
     // Доступ к позиции, предшествующей begin
@@ -41,6 +44,7 @@ void Test() {
         assert(numbers.before_begin() == numbers.cbefore_begin());
         assert(++numbers.before_begin() == numbers.begin());
         assert(++numbers.cbefore_begin() == const_numbers.begin());
+		std::cout<<"Check access to position before begin passed"s<<std::endl;
     }
 
     // Вставка элемента после указанной позиции
@@ -51,6 +55,7 @@ void Test() {
             assert((lst == SingleLinkedList<int>{123}));
             assert(inserted_item_pos == lst.begin());
             assert(*inserted_item_pos == 123);
+			std::cout<<"Check insertion in empty list passed"s<<std::endl;
         }
 
         // Вставка в непустой список
@@ -67,6 +72,7 @@ void Test() {
             assert(++SingleLinkedList<int>::Iterator(lst.begin()) == inserted_item_pos);
             assert(*inserted_item_pos == 555);
             assert((lst == SingleLinkedList<int>{123, 555, 1, 2, 3}));
+			std::cout<<"Check insertion in non-empty list passed"s<<std::endl;
         };
     }
 
@@ -142,6 +148,7 @@ void Test() {
             list.EraseAfter(list.cbegin());
             assert(deletion_counter == 1u);
         }
+		std::cout<<"Check deletion elements after specified position passed"s<<std::endl;
     }
 }
 
